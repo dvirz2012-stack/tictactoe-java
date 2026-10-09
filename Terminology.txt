@@ -1,0 +1,10 @@
+A class has "members" ("איברים"):
+A member is either a "field" ("שדה")
+or a "method" ("שיטה")
+
+Once we declared a class, we can "instantiate" it: we create an "instance" ("מופע") 
+of the class, which is a new "object" ("עצם").
+
+That object now has all the fields and methods defined by the class.
+
+EVERY object is instance of some class, even if it is the only instance of that class.
