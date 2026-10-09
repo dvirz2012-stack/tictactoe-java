@@ -84,7 +84,7 @@ public class Board {
                         }
                             int currRow = row + i * rowc;
                             int currCol = col + i * colc;
-                            if (cells[currRow][currCol] == mark.other()) {
+                            if (cells[currRow][currCol] != mark) {
                                 break;
                             }
 
