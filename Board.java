@@ -1,7 +1,7 @@
 record StreakInfo(int streakLength, Coords nextCoordsInStreak) { }
 
 public class Board {
-    public static final int N = 5;
+    public static final int N = 3;
     public static final int K = 3;
 
     private Mark[][] cells;
