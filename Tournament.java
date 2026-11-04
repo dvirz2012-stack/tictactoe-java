@@ -1,3 +1,5 @@
+import java.io.IOException;
+
 class GameArguments {
     IPlayer[] players;
     String[] playerDescriptions;
@@ -5,12 +7,19 @@ class GameArguments {
 }
 
 public class Tournament {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         var gameArgs = parseArgs(args);
         int rounds = gameArgs.roundsCount;
 
         int playerOneCount = 0;
         int playerTwoCount = 0;
+        String player1Str = gameArgs.playerDescriptions[0];
+        String player2Str = gameArgs.playerDescriptions[1];
+        if(player1Str.equals(player2Str)) {
+            player1Str = "player 1";
+            player2Str = "player 2";
+        }
+
         for(int roundIdx = 0 ; roundIdx < rounds ; roundIdx++) {
             var gameManager = new GameManager(gameArgs.players);
             gameManager.runGame(new VoidRenderer());
@@ -19,18 +28,11 @@ public class Tournament {
                 case GameStatus.O_VICTORY -> playerTwoCount++;
                 default -> { }
             }
+            System.out.printf("%s: %.2f%%, %s: %.2f%% \r",
+                    player1Str, 100f*playerOneCount/rounds,
+                    player2Str, 100f*playerTwoCount/rounds);
         }
-
-        String player1Str = gameArgs.playerDescriptions[0];
-        String player2Str = gameArgs.playerDescriptions[1];
-        if(player1Str.equals(player2Str)) {
-            player1Str = "player 1";
-            player2Str = "player 2";
-        }
-        System.out.printf("%s: %.2f%%, %s: %.2f%%%n",
-                player1Str, 100f*playerOneCount/rounds,
-                player2Str, 100f*playerTwoCount/rounds);
-    }
+   }
 
     private static GameArguments parseArgs(String[] args) {
         //get the players and number of rounds from args

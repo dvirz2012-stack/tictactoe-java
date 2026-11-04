@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 record StreakInfo(int streakLength, Coords nextCoordsInStreak) { }
 
 public class Board {
@@ -8,10 +10,8 @@ public class Board {
 
     public Board() {
         cells = new Mark[N][N];
-        for (int row = 0; row< cells.length; row++){
-            for (int col = 0; col<cells[row].length;col++){
-                cells[row][col] = Mark.BLANK;
-            }
+        for (Mark[] cell : cells) {
+            Arrays.fill(cell, Mark.BLANK);
         }
     }
 
@@ -66,70 +66,80 @@ public class Board {
         int longestStreak = 0;
         Coords nextCoords = null;
         boolean isCompletable = false;
-
-        for (int row = 0; row < N; row++){
-            for (int col = 0; col < N; col++){
-                if (cells[row][col] == mark.other()) {
-                    continue;
-                }
+        for (int row = 0; row < N; row++) {
+            for (int col = 0; col < N; col++) {
                 for (int[] direction : directions) {
+                    Coords blankInStreak = null;
                     int rowc = direction[0];
                     int colc = direction[1];
                     int streakLen = 0;
-                    for (int i = 0; i < K; i++) {
+                    int i;
+                    for (i = 0; i < K; i++) {
                         int nextRow = row + i * rowc;
                         int nextCol = col + i * colc;
                         if (nextRow < 0 || nextRow >= N || nextCol < 0 || nextCol >= N) {
                             break;
                         }
-                            int currRow = row + i * rowc;
-                            int currCol = col + i * colc;
-                            if (cells[currRow][currCol] != mark) {
-                                break;
-                            }
-
-                        streakLen++;
-                    }
-                    //TODO: streak is only relevant if it is fully completable
-                    for (int leftForStreak = streakLen; leftForStreak < K; leftForStreak++) {
-
-                        int nextRow = row + leftForStreak * rowc;
-                        int nextCol = col + leftForStreak * colc;
-                        if (!(nextRow < 0 || nextRow >= N || nextCol < 0 || nextCol >= N) && cells[nextRow][nextCol] == Mark.BLANK) {
-
-                            isCompletable = true;
-
-                        } else {
-
-                            isCompletable = false;
+                        int currRow = row + i * rowc;
+                        int currCol = col + i * colc;
+                        if (cells[currRow][currCol] == mark.other()) {
                             break;
-
                         }
-
+                        if (blankInStreak == null && cells[currRow][currCol] == Mark.BLANK) {
+                            blankInStreak = new Coords(currRow, currCol);
+                        } else if (cells[currRow][currCol] == mark)
+                            streakLen++;
                     }
-                    int nextRow = row + streakLen * rowc;
-                    int nextCol = col + streakLen * colc;
-                    if (streakLen > longestStreak && streakLen < K
-                            && nextRow >= 0 && nextRow < N
-                            && nextCol >= 0 && nextCol < N
-                            && cells[nextRow][nextCol] == Mark.BLANK
-                            && isCompletable) {
-                        longestStreak = streakLen;
-                        nextCoords = new Coords(nextRow, nextCol);
-                    } else if (streakLen == K) {
-                        longestStreak = streakLen;
-                        nextCoords = null;
-                        return new StreakInfo(longestStreak, nextCoords);
-                    } else {
+                    //if this streak had mark.other, or if no longer than the longest streak so far
+                    if (i < K || streakLen <= longestStreak)
                         continue;
-                    }
-
+                    longestStreak = streakLen;
+                    nextCoords = blankInStreak;
                 }
             }
         }
-        if (longestStreak == 0){
+        if (longestStreak == 0)
             return null;
-        }
         return new StreakInfo(longestStreak, nextCoords);
+    }
+
+    public Board clone(){
+
+        var board = new Board();
+        for (int row = 0; row < N; row++){
+            for (int col = 0; col < N; col++){
+                board.cells[row][col] = cells[row][col];
+            }
+        }
+        return board;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        for (Mark[] row : cells) {
+            for (Mark mark : row) {
+                hash = switch (mark) {
+                    case Mark.O -> hash * 3 + 2;
+                    case Mark.X -> hash * 3 + 1;
+                    case Mark.BLANK -> hash * 3;
+                };
+            }
+        }
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(!(obj instanceof Board other))
+            return false;
+
+        for (int i = 0; i < cells.length; i++){
+            if (Arrays.compare(cells[i], other.cells[i]) != 0){
+                return false;
+            }
+        }
+        return true;
+        //return Arrays.compare(cells, other.cells, Arrays::compare) == 0;
     }
 }
