@@ -1,0 +1,102 @@
+[
+  {
+    "board": {
+      "cells": [
+        [
+          "BLANK",
+          "BLANK",
+          "BLANK"
+        ],
+        [
+          "BLANK",
+          "BLANK",
+          "BLANK"
+        ],
+        [
+          "BLANK",
+          "BLANK",
+          "BLANK"
+        ]
+      ]
+    },
+    "coords": {
+      "row": 2,
+      "col": 1
+    }
+  },
+  {
+    "board": {
+      "cells": [
+        [
+          "BLANK",
+          "O",
+          "BLANK"
+        ],
+        [
+          "BLANK",
+          "BLANK",
+          "BLANK"
+        ],
+        [
+          "BLANK",
+          "X",
+          "BLANK"
+        ]
+      ]
+    },
+    "coords": {
+      "row": 0,
+      "col": 2
+    }
+  },
+  {
+    "board": {
+      "cells": [
+        [
+          "BLANK",
+          "O",
+          "X"
+        ],
+        [
+          "BLANK",
+          "BLANK",
+          "O"
+        ],
+        [
+          "BLANK",
+          "X",
+          "BLANK"
+        ]
+      ]
+    },
+    "coords": {
+      "row": 2,
+      "col": 0
+    }
+  },
+  {
+    "board": {
+      "cells": [
+        [
+          "BLANK",
+          "O",
+          "X"
+        ],
+        [
+          "BLANK",
+          "O",
+          "O"
+        ],
+        [
+          "X",
+          "X",
+          "BLANK"
+        ]
+      ]
+    },
+    "coords": {
+      "row": 2,
+      "col": 2
+    }
+  }
+]
